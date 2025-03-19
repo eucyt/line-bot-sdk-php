@@ -571,6 +571,43 @@ class RichMenuRequest implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of RichMenuRequest from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['size'])) {
+            $instance->setsize(\LINE\Clients\MessagingApi\Model\RichMenuSize::from_dict($data['size']));
+        }
+        if (isset($data['selected'])) {
+            $instance->setselected($data['selected']);
+        }
+        if (isset($data['name'])) {
+            $instance->setname($data['name']);
+        }
+        if (isset($data['chatBarText'])) {
+            $instance->setchatBarText($data['chatBarText']);
+        }
+        if (isset($data['areas'])) {
+            $areas = [];
+            foreach ($data['areas'] as $item) {
+                $areas[] = \LINE\Clients\MessagingApi\Model\RichMenuArea::from_dict($item);
+            }
+            $instance->setareas($areas);
+        }
+
+        return $instance;
+    }
 }
 
 

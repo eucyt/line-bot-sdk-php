@@ -590,6 +590,62 @@ class GetFriendsDemographicsResponse implements ModelInterface, ArrayAccess, \Js
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of GetFriendsDemographicsResponse from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['available'])) {
+            $instance->setavailable($data['available']);
+        }
+        if (isset($data['genders'])) {
+            $genders = [];
+            foreach ($data['genders'] as $item) {
+                $genders[] = \LINE\Clients\Insight\Model\GenderTile::from_dict($item);
+            }
+            $instance->setgenders($genders);
+        }
+        if (isset($data['ages'])) {
+            $ages = [];
+            foreach ($data['ages'] as $item) {
+                $ages[] = \LINE\Clients\Insight\Model\AgeTile::from_dict($item);
+            }
+            $instance->setages($ages);
+        }
+        if (isset($data['areas'])) {
+            $areas = [];
+            foreach ($data['areas'] as $item) {
+                $areas[] = \LINE\Clients\Insight\Model\AreaTile::from_dict($item);
+            }
+            $instance->setareas($areas);
+        }
+        if (isset($data['appTypes'])) {
+            $appTypes = [];
+            foreach ($data['appTypes'] as $item) {
+                $appTypes[] = \LINE\Clients\Insight\Model\AppTypeTile::from_dict($item);
+            }
+            $instance->setappTypes($appTypes);
+        }
+        if (isset($data['subscriptionPeriods'])) {
+            $subscriptionPeriods = [];
+            foreach ($data['subscriptionPeriods'] as $item) {
+                $subscriptionPeriods[] = \LINE\Clients\Insight\Model\SubscriptionPeriodTile::from_dict($item);
+            }
+            $instance->setsubscriptionPeriods($subscriptionPeriods);
+        }
+
+        return $instance;
+    }
 }
 
 

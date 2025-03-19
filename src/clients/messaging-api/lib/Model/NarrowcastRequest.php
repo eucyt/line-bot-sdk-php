@@ -573,6 +573,43 @@ class NarrowcastRequest implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of NarrowcastRequest from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['messages'])) {
+            $messages = [];
+            foreach ($data['messages'] as $item) {
+                $messages[] = \LINE\Clients\MessagingApi\Model\Message::from_dict($item);
+            }
+            $instance->setmessages($messages);
+        }
+        if (isset($data['recipient'])) {
+            $instance->setrecipient(\LINE\Clients\MessagingApi\Model\Recipient::from_dict($data['recipient']));
+        }
+        if (isset($data['filter'])) {
+            $instance->setfilter(\LINE\Clients\MessagingApi\Model\Filter::from_dict($data['filter']));
+        }
+        if (isset($data['limit'])) {
+            $instance->setlimit(\LINE\Clients\MessagingApi\Model\Limit::from_dict($data['limit']));
+        }
+        if (isset($data['notificationDisabled'])) {
+            $instance->setnotificationDisabled($data['notificationDisabled']);
+        }
+
+        return $instance;
+    }
 }
 
 

@@ -490,6 +490,52 @@ class Message implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of Message from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $discriminatorValue = $data[self::DISCRIMINATOR] ?? null;
+        $discriminatorMap = [
+            'audio' => AudioMessage::class,
+'flex' => FlexMessage::class,
+'image' => ImageMessage::class,
+'imagemap' => ImagemapMessage::class,
+'location' => LocationMessage::class,
+'sticker' => StickerMessage::class,
+'template' => TemplateMessage::class,
+'text' => TextMessage::class,
+'textV2' => TextMessageV2::class,
+'video' => VideoMessage::class,
+        ];
+
+        if (isset($discriminatorValue) && isset($discriminatorMap[$discriminatorValue])) {
+            $modelClass = $discriminatorMap[$discriminatorValue];
+            return $modelClass::from_dict($data);
+        }
+
+        $instance = new static();
+
+        if (isset($data['type'])) {
+            $instance->settype($data['type']);
+        }
+        if (isset($data['quickReply'])) {
+            $instance->setquickReply(\LINE\Clients\MessagingApi\Model\QuickReply::from_dict($data['quickReply']));
+        }
+        if (isset($data['sender'])) {
+            $instance->setsender(\LINE\Clients\MessagingApi\Model\Sender::from_dict($data['sender']));
+        }
+
+        return $instance;
+    }
 }
 
 

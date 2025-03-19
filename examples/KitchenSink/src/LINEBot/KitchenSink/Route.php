@@ -38,6 +38,7 @@ use LINE\LINEBot\KitchenSink\EventHandler\UnfollowEventHandler;
 use LINE\Constants\HTTPHeader;
 use LINE\Parser\Event\UnknownEvent;
 use LINE\Parser\EventRequestParser;
+use LINE\Webhook\Model\Event;
 use LINE\Webhook\Model\MessageEvent;
 use LINE\Parser\Exception\InvalidEventRequestException;
 use LINE\Parser\Exception\InvalidSignatureException;
@@ -55,6 +56,7 @@ use LINE\Webhook\Model\TextMessageContent;
 use LINE\Webhook\Model\ThingsEvent;
 use LINE\Webhook\Model\UnfollowEvent;
 use LINE\Webhook\Model\VideoMessageContent;
+use LINE\Webhook\ObjectSerializer;
 
 class Route
 {

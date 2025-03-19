@@ -422,6 +422,31 @@ class Mention implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of Mention from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['mentionees'])) {
+            $mentionees = [];
+            foreach ($data['mentionees'] as $item) {
+                $mentionees[] = \LINE\Webhook\Model\Mentionee::from_dict($item);
+            }
+            $instance->setmentionees($mentionees);
+        }
+
+        return $instance;
+    }
 }
 
 

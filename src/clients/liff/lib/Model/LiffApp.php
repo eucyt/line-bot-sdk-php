@@ -623,6 +623,45 @@ class LiffApp implements ModelInterface, ArrayAccess, \JsonSerializable
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of LiffApp from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['liffId'])) {
+            $instance->setliffId($data['liffId']);
+        }
+        if (isset($data['view'])) {
+            $instance->setview(\LINE\Clients\Liff\Model\LiffView::from_dict($data['view']));
+        }
+        if (isset($data['description'])) {
+            $instance->setdescription($data['description']);
+        }
+        if (isset($data['features'])) {
+            $instance->setfeatures(\LINE\Clients\Liff\Model\LiffFeatures::from_dict($data['features']));
+        }
+        if (isset($data['permanentLinkPattern'])) {
+            $instance->setpermanentLinkPattern($data['permanentLinkPattern']);
+        }
+        if (isset($data['scope'])) {
+            $instance->setscope($data['scope']);
+        }
+        if (isset($data['botPrompt'])) {
+            $instance->setbotPrompt($data['botPrompt']);
+        }
+
+        return $instance;
+    }
 }
 
 

@@ -488,6 +488,41 @@ class GetMessageEventResponse implements ModelInterface, ArrayAccess, \JsonSeria
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of GetMessageEventResponse from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['overview'])) {
+            $instance->setoverview(\LINE\Clients\Insight\Model\GetMessageEventResponseOverview::from_dict($data['overview']));
+        }
+        if (isset($data['messages'])) {
+            $messages = [];
+            foreach ($data['messages'] as $item) {
+                $messages[] = \LINE\Clients\Insight\Model\GetMessageEventResponseMessage::from_dict($item);
+            }
+            $instance->setmessages($messages);
+        }
+        if (isset($data['clicks'])) {
+            $clicks = [];
+            foreach ($data['clicks'] as $item) {
+                $clicks[] = \LINE\Clients\Insight\Model\GetMessageEventResponseClick::from_dict($item);
+            }
+            $instance->setclicks($clicks);
+        }
+
+        return $instance;
+    }
 }
 
 

@@ -423,6 +423,39 @@ class MembershipContent implements ModelInterface, ArrayAccess, \JsonSerializabl
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of MembershipContent from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $discriminatorValue = $data[self::DISCRIMINATOR] ?? null;
+        $discriminatorMap = [
+            'joined' => JoinedMembershipContent::class,
+'left' => LeftMembershipContent::class,
+'renewed' => RenewedMembershipContent::class,
+        ];
+
+        if (isset($discriminatorValue) && isset($discriminatorMap[$discriminatorValue])) {
+            $modelClass = $discriminatorMap[$discriminatorValue];
+            return $modelClass::from_dict($data);
+        }
+
+        $instance = new static();
+
+        if (isset($data['type'])) {
+            $instance->settype($data['type']);
+        }
+
+        return $instance;
+    }
 }
 
 

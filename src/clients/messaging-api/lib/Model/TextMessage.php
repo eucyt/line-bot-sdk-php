@@ -484,6 +484,46 @@ class TextMessage extends Message
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of TextMessage from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        $instance = new static();
+
+        if (isset($data['type'])) {
+            $instance->settype($data['type']);
+        }
+        if (isset($data['quickReply'])) {
+            $instance->setquickReply(\LINE\Clients\MessagingApi\Model\QuickReply::from_dict($data['quickReply']));
+        }
+        if (isset($data['sender'])) {
+            $instance->setsender(\LINE\Clients\MessagingApi\Model\Sender::from_dict($data['sender']));
+        }
+        if (isset($data['text'])) {
+            $instance->settext($data['text']);
+        }
+        if (isset($data['emojis'])) {
+            $emojis = [];
+            foreach ($data['emojis'] as $item) {
+                $emojis[] = \LINE\Clients\MessagingApi\Model\Emoji::from_dict($item);
+            }
+            $instance->setemojis($emojis);
+        }
+        if (isset($data['quoteToken'])) {
+            $instance->setquoteToken($data['quoteToken']);
+        }
+
+        return $instance;
+    }
 }
 
 
