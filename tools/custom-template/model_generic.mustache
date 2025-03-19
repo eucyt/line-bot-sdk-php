@@ -557,4 +557,90 @@ class {{classname}} {{#parentSchema}}extends {{{parent}}}{{/parentSchema}}{{^par
     {
         return json_encode(ObjectSerializer::sanitizeForSerialization($this));
     }
+
+    /**
+     * Create an instance of {{{classname}}} from a dict (associative array)
+     *
+     * @param array|null $data Associative array of property values
+     * @return static|null
+     */
+    public static function from_dict(?array $data): ?self
+    {
+        if ($data === null) {
+            return new static();
+        }
+
+        {{#hasChildren}}
+        {{#discriminator}}
+        $discriminatorValue = $data[self::DISCRIMINATOR] ?? null;
+        $discriminatorMap = [
+            {{#mappedModels}}'{{{mappingName}}}' => {{modelName}}::class,
+            {{/mappedModels}}
+        ];
+
+        if (isset($discriminatorValue) && isset($discriminatorMap[$discriminatorValue])) {
+            $modelClass = $discriminatorMap[$discriminatorValue];
+            return $modelClass::from_dict($data);
+        }
+
+        {{/discriminator}}
+        {{/hasChildren}}
+        $instance = new static();
+
+        {{#allVars}}
+        if (isset($data['{{baseName}}'])) {
+            {{#isContainer}}
+            {{#isArray}}
+            {{^items.isPrimitiveType}}
+            {{^items.isEnumOrRef}}
+            ${{name}} = [];
+            foreach ($data['{{baseName}}'] as $item) {
+                ${{name}}[] = {{items.dataType}}::from_dict($item);
+            }
+            $instance->set{{name}}(${{name}});
+            {{/items.isEnumOrRef}}
+            {{#items.isEnumOrRef}}
+            $instance->set{{name}}($data['{{baseName}}']);
+            {{/items.isEnumOrRef}}
+            {{/items.isPrimitiveType}}
+            {{#items.isPrimitiveType}}
+            $instance->set{{name}}($data['{{baseName}}']);
+            {{/items.isPrimitiveType}}
+            {{/isArray}}
+            {{#isMap}}
+            {{^items.isPrimitiveType}}
+            {{^items.isEnumOrRef}}
+            ${{name}} = [];
+            foreach ($data['{{baseName}}'] as $key => $value) {
+                ${{name}}[$key] = {{items.dataType}}::from_dict($value);
+            }
+            $instance->set{{name}}(${{name}});
+            {{/items.isEnumOrRef}}
+            {{#items.isEnumOrRef}}
+            $instance->set{{name}}($data['{{baseName}}']);
+            {{/items.isEnumOrRef}}
+            {{/items.isPrimitiveType}}
+            {{#items.isPrimitiveType}}
+            $instance->set{{name}}($data['{{baseName}}']);
+            {{/items.isPrimitiveType}}
+            {{/isMap}}
+            {{/isContainer}}
+            {{^isContainer}}
+            {{^isPrimitiveType}}
+            {{^isEnumOrRef}}
+            $instance->set{{name}}({{dataType}}::from_dict($data['{{baseName}}']));
+            {{/isEnumOrRef}}
+            {{#isEnumOrRef}}
+            $instance->set{{name}}($data['{{baseName}}']);
+            {{/isEnumOrRef}}
+            {{/isPrimitiveType}}
+            {{#isPrimitiveType}}
+            $instance->set{{name}}($data['{{baseName}}']);
+            {{/isPrimitiveType}}
+            {{/isContainer}}
+        }
+        {{/allVars}}
+
+        return $instance;
+    }
 }
