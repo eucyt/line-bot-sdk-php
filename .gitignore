@@ -27,3 +27,5 @@ src/clients/messaging-api/*
 src/webhook/*
 !src/webhook/lib/
 !src/webhook/test/
+
+.serena
