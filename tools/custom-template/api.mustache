@@ -284,7 +284,7 @@ use {{invokerPackage}}\ObjectSerializer;
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, '{{{dataType}}}', []),
+                        {{dataType}}::fromAssocArray($content),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];{{/isRange}}
@@ -330,7 +330,7 @@ use {{invokerPackage}}\ObjectSerializer;
             }
 
             return [
-                ObjectSerializer::deserialize($content, $returnType, []),
+                {{returnType}}::fromAssocArray($content),
                 $response->getStatusCode(),
                 $response->getHeaders()
             ];
@@ -493,7 +493,7 @@ use {{invokerPackage}}\ObjectSerializer;
                     }
 
                     return [
-                        ObjectSerializer::deserialize($content, $returnType, []),
+                        {{returnType}}::fromAssocArray($content),
                         $response->getStatusCode(),
                         $response->getHeaders()
                     ];
